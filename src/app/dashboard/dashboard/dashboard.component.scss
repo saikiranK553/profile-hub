@@ -1,0 +1,28 @@
+.dashboard-container {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+mat-card {
+  margin: 20px 0;
+}
+
+mat-card-header img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+table {
+  width: 100%;
+}
+
+mat-chip {
+  margin: 0 5px;
+}
+
+small {
+  color: #666;
+}

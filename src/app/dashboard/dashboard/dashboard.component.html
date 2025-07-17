@@ -1,0 +1,220 @@
+<!-- <p>SAikiran</p>
+
+<div class="dashboard-container">
+  <mat-card class="user-profile-card" *ngIf="currentUser">
+    <mat-card-header>
+      <div mat-card-avatar class="profile-avatar">
+        <img [src]="currentUser.profileImageUrl" [alt]="currentUser.username" />
+      </div>
+      <mat-card-title
+        >{{ currentUser.firstName }} {{ currentUser.lastName }}</mat-card-title
+      >
+      <mat-card-subtitle>{{ currentUser.username }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="user-details">
+        <p><strong>Email:</strong> {{ currentUser.email }}</p>
+        <p>
+          <strong>Phone:</strong>
+          {{ currentUser.phoneNumber || "Not provided" }}
+        </p>
+        <p>
+          <strong>Address:</strong> {{ currentUser.address || "Not provided" }}
+        </p>
+        <p><strong>Bio:</strong> {{ currentUser.bio || "No bio available" }}</p>
+        <p>
+          <strong>Member since:</strong> {{ formatDate(currentUser.createdAt) }}
+        </p>
+        <p>
+          <strong>Last login:</strong> {{ formatDate(currentUser.lastLogin) }}
+        </p>
+      </div>
+
+      <div class="role-chip">
+        <mat-chip [color]="getRoleColor(currentUser.role)" selected>
+          {{ currentUser.role }}
+        </mat-chip>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="users-management-card" *ngIf="isAdmin">
+    <mat-card-header>
+      <mat-card-title>User Management</mat-card-title>
+      <mat-card-subtitle>Manage all system users</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="table-container">
+        <table mat-table [dataSource]="users" class="users-table">
+          <ng-container matColumnDef="profileImage">
+            <th mat-header-cell *matHeaderCellDef>Profile</th>
+            <td mat-cell *matCellDef="let user">
+              <img
+                [src]="user.profileImageUrl"
+                [alt]="user.username"
+                class="table-avatar"
+              />
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let user">
+              <div class="name-cell">
+                <span class="full-name"
+                  >{{ user.firstName }} {{ user.lastName }}</span
+                >
+                <span class="username">{{ user.username }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>Email</th>
+            <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="role">
+            <th mat-header-cell *matHeaderCellDef>Role</th>
+            <td mat-cell *matCellDef="let user">
+              <mat-chip [color]="getRoleColor(user.role)" selected>
+                {{ user.role }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="lastLogin">
+            <th mat-header-cell *matHeaderCellDef>Last Login</th>
+            <td mat-cell *matCellDef="let user">
+              {{ formatDate(user.lastLogin) }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let user">
+              <button
+                mat-icon-button
+                color="warn"
+                [disabled]="user.id === currentUser?.id"
+                (click)="deleteUser(user.id)"
+                matTooltip="Delete User"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+
+      <mat-paginator
+        [length]="totalUsers"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 20, 50]"
+        [pageIndex]="pageIndex"
+        (page)="onPageChange($event)"
+        showFirstLastButtons
+      >
+      </mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div> -->
+
+<div class="dashboard-container">
+  <mat-tab-group>
+    <!-- My Profile Tab -->
+    <mat-tab label="My Profile">
+      <mat-card *ngIf="currentUser">
+        <mat-card-header>
+          <div mat-card-avatar>
+            <img
+              [src]="currentUser.profileImageUrl || 'assets/default-avatar.svg'"
+              [alt]="currentUser.username"
+            />
+          </div>
+          <mat-card-title
+            >{{ currentUser.firstName }}
+            {{ currentUser.lastName }}</mat-card-title
+          >
+          <mat-card-subtitle>{{ currentUser.username }}</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p><strong>Email:</strong> {{ currentUser.email }}</p>
+          <p>
+            <strong>Phone:</strong>
+            {{ currentUser.phoneNumber || "Not provided" }}
+          </p>
+          <p>
+            <strong>Role:</strong>
+            <mat-chip [color]="getRoleColor(currentUser.role)" selected>
+              {{ currentUser.role }}
+            </mat-chip>
+          </p>
+          <p>
+            <strong>Member since:</strong>
+            {{ formatDate(currentUser.createdAt) }}
+          </p>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+
+    <!-- User Management Tab (Admin Only) -->
+    <mat-tab label="All Users" *ngIf="isAdmin">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>User Management</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <table mat-table [dataSource]="users">
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Name</th>
+              <td mat-cell *matCellDef="let user">
+                {{ user.firstName }} {{ user.lastName }} <br /><small>{{
+                  user.username
+                }}</small>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="email">
+              <th mat-header-cell *matHeaderCellDef>Email</th>
+              <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="role">
+              <th mat-header-cell *matHeaderCellDef>Role</th>
+              <td mat-cell *matCellDef="let user">
+                <mat-chip [color]="getRoleColor(user.role)" selected>
+                  {{ user.role }}
+                </mat-chip>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let user">
+                <button
+                  mat-icon-button
+                  color="warn"
+                  [disabled]="user.id === currentUser?.id"
+                  (click)="deleteUser(user.id)"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+  </mat-tab-group>
+</div>
