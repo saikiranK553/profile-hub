@@ -3,6 +3,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-header',
@@ -22,16 +23,14 @@ import { CommonModule } from '@angular/common';
               {{ currentUser?.email || 'User' }}
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" routerLink="/profile">Profile</a></li>
-              <li><hr class="dropdown-divider"></li>
+              
               <li><a class="dropdown-item" (click)="logout()" style="cursor: pointer;">Logout</a></li>
             </ul>
           </div>
         </div>
         
         <div class="navbar-nav ms-auto" *ngIf="!isAuthenticated">
-          <a class="nav-link" routerLink="/auth/login">Login</a>
-          <a class="nav-link" routerLink="/auth/register">Register</a>
+          <span class="navbar-text">Welcome To Profile-Hub</span>
         </div>
       </div>
     </nav>
@@ -52,6 +51,7 @@ export class HeaderComponent implements OnInit,OnDestroy{
   private authService = inject(AuthService);
   private router = inject(Router);
   private destroy$ = new Subject<void>();
+  private snackBar = inject(MatSnackBar);
 
   isAuthenticated = false;
   currentUser: any = null;
@@ -93,16 +93,35 @@ export class HeaderComponent implements OnInit,OnDestroy{
           next: () => {
             console.log('Logout successful');
             this.isLoggingOut = false;
+            this.snackBar.open('You have been logged out successfully', 'Close', {
+              duration: 3000,
+              panelClass: ['success-snackbar'],
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom'
+            });
             // AuthService will automatically navigate to login
           },
           error: (error) => {
             console.error('Logout error:', error);
             this.isLoggingOut = false;
+
+            this.snackBar.open('Logout failed. Please try again.', 'Close', {
+              duration: 4000,
+              panelClass: ['error-snackbar'],
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom'
+            });
             // Even if logout fails, user will be logged out locally
           }
         });
     } else {
       this.isLoggingOut = false;
+      this.snackBar.open('Logout cancelled', 'Close', {
+        duration: 2000,
+        panelClass: ['info-snackbar'],
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom'
+      });
     }
   }
 }

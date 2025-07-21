@@ -24,7 +24,7 @@
       <div
         class="text-danger mt-1"
         *ngIf="
-          registerForm.get('username')?.touched &&
+          (registerForm.get('username')?.touched || registerForm.get('username')?.dirty) &&
           registerForm.get('username')?.errors
         "
       >

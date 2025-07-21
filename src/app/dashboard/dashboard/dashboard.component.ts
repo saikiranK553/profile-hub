@@ -144,6 +144,7 @@ export class DashboardComponent implements OnInit{
   loading = false;
 
   displayedColumns: string[] = ['name', 'email', 'role', 'lastLogin', 'actions'];
+  
 
   ngOnInit() {
     this.loadCurrentUser();
