@@ -1,0 +1,56 @@
+<div class="dialog-container">
+    <h2 mat-dialog-title>Edit User Role</h2>
+
+    <mat-dialog-content class="dialog-content">
+        <div class="user-info">
+            <mat-icon class="user-icon">person</mat-icon>
+            <div class="user-details">
+                <h3>{{ data.user.firstName }} {{ data.user.lastName }}</h3>
+                <p class="username">{{ data.user.username }}</p>
+                <p class="email">{{ data.user.email }}</p>
+            </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="role-selection">
+            <h4>Select New Role:</h4>
+            <mat-radio-group [formControl]="roleControl" class="role-options">
+                <mat-radio-button value="USER" class="role-option">
+                    <div class="role-info">
+                        <mat-icon>person</mat-icon>
+                        <div>
+                            <strong>User</strong>
+                            <p>Standard user with basic permissions</p>
+                        </div>
+                    </div>
+                </mat-radio-button>
+
+                <mat-radio-button value="ADMIN" class="role-option">
+                    <div class="role-info">
+                        <mat-icon>admin_panel_settings</mat-icon>
+                        <div>
+                            <strong>Administrator</strong>
+                            <p>Full access to manage users and system settings</p>
+                        </div>
+                    </div>
+                </mat-radio-button>
+            </mat-radio-group>
+        </div>
+
+        <div class="current-role-chip">
+            <span>Current Role:</span>
+            <mat-chip [color]="getRoleColor(data.user.role)" selected>
+                {{ data.user.role }}
+            </mat-chip>
+        </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end" class="dialog-actions">
+        <button mat-button (click)="onCancel()">Cancel</button>
+        <button mat-raised-button color="primary"
+            [disabled]="!roleControl.valid || roleControl.value === data.user.role" (click)="onSave()">
+            Update Role
+        </button>
+    </mat-dialog-actions>
+</div>

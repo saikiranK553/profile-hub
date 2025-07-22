@@ -1,4 +1,4 @@
-<div class="offset-md-4 col-md-4 mt-5">
+<!-- <div class="offset-md-4 col-md-4 mt-5">
   <h2 class="mb-4">Register</h2>
   <form
     *ngIf="registerForm"
@@ -6,7 +6,6 @@
     (ngSubmit)="onSubmit()"
     novalidate
   >
-    <!-- Username -->
     <div class="form-group mb-3">
       <label for="username">Username *</label>
       <input
@@ -37,7 +36,6 @@
       </div>
     </div>
 
-    <!-- Password -->
     <div class="form-group mb-3">
       <label for="password">Password *</label>
       <input
@@ -68,7 +66,6 @@
       </div>
     </div>
 
-    <!-- Email -->
     <div class="form-group mb-3">
       <label for="email">Email *</label>
       <input
@@ -99,7 +96,6 @@
       </div>
     </div>
 
-    <!-- First Name -->
     <div class="form-group mb-3">
       <label for="firstName">First Name *</label>
       <input
@@ -125,7 +121,6 @@
       </div>
     </div>
 
-    <!-- Last Name -->
     <div class="form-group mb-3">
       <label for="lastName">Last Name *</label>
       <input
@@ -151,7 +146,6 @@
       </div>
     </div>
 
-    <!-- Phone Number -->
     <div class="form-group mb-3">
       <label for="phoneNumber">Phone Number *</label>
       <input
@@ -177,7 +171,6 @@
       </div>
     </div>
 
-    <!-- Address -->
     <div class="form-group mb-3">
       <label for="address">Address</label>
       <input
@@ -189,7 +182,6 @@
       />
     </div>
 
-    <!-- Bio -->
     <div class="form-group mb-4">
       <label for="bio">Bio</label>
       <textarea
@@ -201,7 +193,250 @@
       ></textarea>
     </div>
 
-    <!-- Submit Button -->
+    <button
+      type="submit"
+      class="btn btn-primary w-100"
+      [disabled]="registerForm.invalid"
+    >
+      Register
+    </button>
+
+    <div class="text-center mt-3">
+      <small>
+        Already have an account?
+        <a routerLink="/auth/login" class="text-primary">Login here</a>
+      </small>
+    </div>
+  </form>
+</div> -->
+
+<div class="offset-md-4 col-md-4 mt-5">
+  <h2 class="mb-4">Register</h2>
+  <form
+    *ngIf="registerForm"
+    [formGroup]="registerForm"
+    (ngSubmit)="onSubmit()"
+    novalidate
+  >
+    <div class="form-group mb-3">
+      <label for="username">Username *</label>
+      <input
+        id="username"
+        name="username"
+        type="text"
+        formControlName="username"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid':
+            (registerForm.get('username')?.touched || registerForm.get('username')?.dirty) &&
+            registerForm.get('username')?.invalid
+        }"
+      />
+      <div
+        class="text-danger mt-1"
+        *ngIf="
+          (registerForm.get('username')?.touched || registerForm.get('username')?.dirty) &&
+          registerForm.get('username')?.errors
+        "
+      >
+        <div *ngIf="registerForm.get('username')?.errors?.['required']">
+          Username is required.
+        </div>
+        <div *ngIf="registerForm.get('username')?.errors?.['minlength']">
+          Username must be at least 3 characters.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="password">Password *</label>
+      <input
+        id="password"
+        name="password"
+        type="password"
+        formControlName="password"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid':
+            (registerForm.get('password')?.touched || registerForm.get('password')?.dirty) &&
+            registerForm.get('password')?.invalid
+        }"
+      />
+      <div
+        class="text-danger mt-1"
+        *ngIf="
+          (registerForm.get('password')?.touched || registerForm.get('password')?.dirty) &&
+          registerForm.get('password')?.errors
+        "
+      >
+        <div *ngIf="registerForm.get('password')?.errors?.['required']">
+          Password is required.
+        </div>
+        <div *ngIf="registerForm.get('password')?.errors?.['minlength']">
+          Password must be at least 6 characters.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="email">Email *</label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        formControlName="email"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid':
+            (registerForm.get('email')?.touched || registerForm.get('email')?.dirty) &&
+            registerForm.get('email')?.invalid
+        }"
+      />
+      <div
+        class="text-danger mt-1"
+        *ngIf="
+          (registerForm.get('email')?.touched || registerForm.get('email')?.dirty) &&
+          registerForm.get('email')?.errors
+        "
+      >
+        <div *ngIf="registerForm.get('email')?.errors?.['required']">
+          Email is required.
+        </div>
+        <div *ngIf="registerForm.get('email')?.errors?.['email']">
+          Enter a valid email address.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="firstName">First Name *</label>
+      <input
+        id="firstName"
+        name="firstName"
+        type="text"
+        formControlName="firstName"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid':
+            (registerForm.get('firstName')?.touched || registerForm.get('firstName')?.dirty) &&
+            registerForm.get('firstName')?.invalid
+        }"
+      />
+      <div
+        class="text-danger mt-1"
+        *ngIf="
+          (registerForm.get('firstName')?.touched || registerForm.get('firstName')?.dirty) &&
+          registerForm.get('firstName')?.errors
+        "
+      >
+        <div *ngIf="registerForm.get('firstName')?.errors?.['required']">
+          First name is required.
+        </div>
+        <div *ngIf="registerForm.get('firstName')?.errors?.['minlength']">
+          First name must be at least 2 characters.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="lastName">Last Name *</label>
+      <input
+        id="lastName"
+        name="lastName"
+        type="text"
+        formControlName="lastName"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid':
+            (registerForm.get('lastName')?.touched || registerForm.get('lastName')?.dirty) &&
+            registerForm.get('lastName')?.invalid
+        }"
+      />
+      <div
+        class="text-danger mt-1"
+        *ngIf="
+          (registerForm.get('lastName')?.touched || registerForm.get('lastName')?.dirty) &&
+          registerForm.get('lastName')?.errors
+        "
+      >
+        <div *ngIf="registerForm.get('lastName')?.errors?.['required']">
+          Last name is required.
+        </div>
+        <div *ngIf="registerForm.get('lastName')?.errors?.['minlength']">
+          Last name must be at least 2 characters.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="phoneNumber">Phone Number *</label>
+      <input
+        id="phoneNumber"
+        name="phoneNumber"
+        type="tel"
+        formControlName="phoneNumber"
+        class="form-control"
+        placeholder="9876543210"
+        [ngClass]="{
+          'is-invalid':
+            (registerForm.get('phoneNumber')?.touched || registerForm.get('phoneNumber')?.dirty) &&
+            registerForm.get('phoneNumber')?.invalid
+        }"
+      />
+      <div
+        class="text-danger mt-1"
+        *ngIf="
+          (registerForm.get('phoneNumber')?.touched || registerForm.get('phoneNumber')?.dirty) &&
+          registerForm.get('phoneNumber')?.errors
+        "
+      >
+        <div *ngIf="registerForm.get('phoneNumber')?.errors?.['required']">
+          Phone number is required.
+        </div>
+        <div *ngIf="registerForm.get('phoneNumber')?.errors?.['pattern']">
+          Phone number must start with 9, 8, 7, or 6 and contain exactly 10 digits.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="address">Address</label>
+      <input
+        id="address"
+        name="address"
+        type="text"
+        formControlName="address"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid':
+            (registerForm.get('address')?.touched || registerForm.get('address')?.dirty) &&
+            registerForm.get('address')?.invalid
+        }"
+      />
+      <div
+        class="text-danger mt-1"
+        *ngIf="
+          (registerForm.get('address')?.touched || registerForm.get('address')?.dirty) &&
+          registerForm.get('address')?.errors
+        "
+      >
+        <div *ngIf="registerForm.get('address')?.errors?.['minlength']">
+          Address must be at least 5 characters.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group mb-4">
+      <label for="bio">Bio</label>
+      <textarea
+        id="bio"
+        name="bio"
+        formControlName="bio"
+        rows="3"
+        class="form-control"
+      ></textarea>
+    </div>
+
     <button
       type="submit"
       class="btn btn-primary w-100"

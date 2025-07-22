@@ -25,14 +25,14 @@ export class RegisterComponent implements OnInit{
   registerForm!:FormGroup;
   ngOnInit() {
     this.registerForm = this.fb.group({
-    username: ['', [Validators.required, Validators.minLength(3)]],
+     username: ['', [Validators.required, Validators.minLength(3)]],
     password: ['', [Validators.required, Validators.minLength(6)]],
     email: ['', [Validators.required, Validators.email]],
-    firstName: ['', Validators.required],
-    lastName: ['', Validators.required],
-    phoneNumber: ['',Validators.required],
-    address: [''],
-    bio: [''],
+    firstName: ['', [Validators.required, Validators.minLength(2)]],
+    lastName: ['', [Validators.required, Validators.minLength(2)]],
+    phoneNumber: ['', [Validators.required, Validators.pattern('^[9876][0-9]{9}$')]],
+    address: ['', [Validators.minLength(5)]],
+    bio: ['',]
     });
   }
 
@@ -45,31 +45,24 @@ export class RegisterComponent implements OnInit{
           console.log('User registered successfully:', response);
           
           
-          // Reset form
           this.registerForm.reset();
           this.snackBar.open('Registration successful! Please login with your credentials.', 'Close', {
               duration: 4000,
               panelClass: ['success-snackbar']
             });
           
-          // Navigate to login page after a delay
-          //setTimeout(() => {
             this.router.navigate(['/auth/login']);
-          //}, 2000);
         },
         error: (error) => {
           this.errorMessage = error.message || 'Registration failed. Please try again.';
-
           this.snackBar.open(this.errorMessage, 'Close', {
-              duration: 5000,
-              panelClass: ['error-snackbar']
-            });
+           duration: 5000,
+           panelClass: ['error-snackbar']
+         });
           console.error('Registration failed:', error);
-          
         }
       });
     } else {
-      // Mark all fields as touched to show validation errors
       Object.keys(this.registerForm.controls).forEach(key => {
         this.registerForm.get(key)?.markAsTouched();
       });

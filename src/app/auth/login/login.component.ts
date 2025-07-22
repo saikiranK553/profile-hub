@@ -50,7 +50,6 @@ export class LoginComponent implements OnInit,OnDestroy{
           next: (response) => {
             console.log('Login successful:', response);
             
-            // Store authentication data
             this.authService.storeAuthData(response);
             
             this.isSubmitting = false;
@@ -59,7 +58,6 @@ export class LoginComponent implements OnInit,OnDestroy{
               panelClass: ['success-snackbar']
             });
             
-            // Navigate to dashboard or intended route
             this.router.navigate(['/dashboard']);
           },
           error: (error) => {
@@ -73,7 +71,6 @@ export class LoginComponent implements OnInit,OnDestroy{
           }
         });
     } else {
-      // Mark all fields as touched to show validation errors
       Object.keys(this.loginForm.controls).forEach(key => {
         this.loginForm.get(key)?.markAsTouched();
       });

@@ -1,9 +1,6 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
-import { HeaderComponent } from "../../shared/header/header.component";
 import { PageResponse, UserResponseDto } from '../../core/models/user.model';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,8 +11,9 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { ProfileService } from '../../core/services/profile.service';
 import { MatTabsModule } from '@angular/material/tabs';
-import { AuthService } from '../../core/services/auth.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { EditUserRoleComponent } from '../edit-user-role/edit-user-role.component';
 
 
 @Component({
@@ -30,8 +28,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatCardModule,
     MatChipsModule,
     MatDialogModule,
+    MatTooltipModule,
     MatSnackBarModule,
-  MatProgressSpinnerModule],
+  MatProgressSpinnerModule,
+EditUserRoleComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
@@ -40,98 +40,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 export class DashboardComponent implements OnInit{
 
-  // private profileService = inject(ProfileService);
-  // private authService=inject(AuthService);
-  // private dialog = inject(MatDialog);
-  // private snackBar = inject(MatSnackBar);
-
-  // currentUser: UserResponseDto | null = null;
-  // users: UserResponseDto[] = [];
-  // totalUsers = 0;
-  // pageSize = 10;
-  // pageIndex = 0;
-  // isAdmin = false;
-  // loading = false;
-
-  // displayedColumns: string[] = ['name', 'email', 'role', 'lastLogin', 'actions'];
-
-  // ngOnInit() {
-  //   this.loadCurrentUser();
-  //   this.checkAdminRole();
-  // }
-
-  // loadCurrentUser() {
-  //   const currentUserId = this.profileService.getCurrentUserId();
-  //   if (currentUserId) {
-  //     this.profileService.getUserById(currentUserId).subscribe({
-  //       next: (user) => {
-  //         this.currentUser = user;
-  //         this.isAdmin = user.role === 'ADMIN';
-  //         if (this.isAdmin) {
-  //           this.loadAllUsers();
-  //         }
-  //       },
-  //       error: (error) => this.handleError('Failed to load user details', error)
-  //     });
-  //   }
-  // }
-
-  // checkAdminRole() {
-  //   this.isAdmin = this.profileService.isCurrentUserAdmin();
-  // }
-
-  // loadAllUsers() {
-  //   if (!this.isAdmin) return;
-    
-  //   this.loading = true;
-  //   this.profileService.getAllUsers(this.pageIndex, this.pageSize).subscribe({
-  //     next: (response: PageResponse<UserResponseDto>) => {
-  //       this.users = response.content;
-  //       this.totalUsers = response.totalElements;
-  //       this.loading = false;
-  //     },
-  //     error: (error) => {
-  //       this.handleError('Failed to load users', error);
-  //       this.loading = false;
-  //     }
-  //   });
-  // }
-
-  // onPageChange(event: PageEvent) {
-  //   this.pageIndex = event.pageIndex;
-  //   this.pageSize = event.pageSize;
-  //   this.loadAllUsers();
-  // }
-
-  // deleteUser(userId: number) {
-  //   const user = this.users.find(u => u.id === userId);
-  //   if (confirm(`Are you sure you want to delete user: ${user?.username}?`)) {
-  //     this.profileService.deleteUserById(userId).subscribe({
-  //       next: (message) => {
-  //         this.snackBar.open(message, 'Close', { duration: 3000 });
-  //         this.loadAllUsers(); // Refresh the list
-  //       },
-  //       error: (error) => this.handleError('Failed to delete user', error)
-  //     });
-  //   }
-  // }
-
-  // private handleError(message: string, error: any) {
-  //   console.error(message, error);
-  //   this.snackBar.open(message, 'Close', { duration: 5000 });
-  // }
-
-  // getRoleColor(role: string): string {
-  //   return role === 'ADMIN' ? 'warn' : 'primary';
-  // }
-
-  // formatDate(dateString: string): string {
-  //   return new Date(dateString).toLocaleDateString();
-  // }
-
 
   private profileService = inject(ProfileService);
-  private authService=inject(AuthService);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
 
@@ -194,13 +104,46 @@ export class DashboardComponent implements OnInit{
     this.loadAllUsers();
   }
 
+  editUserRole(user: UserResponseDto) {
+  const dialogRef = this.dialog.open(EditUserRoleComponent, {
+    width: '500px',
+    height:'72vh',
+    data: { user: user },
+    disableClose: false,
+    autoFocus: true
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    if (result) {
+      this.updateUserRole(result.userId, result.newRole, user.username);
+    }
+  });
+}
+
+private updateUserRole(userId: number, newRole: string, username: string) {
+  this.profileService.updateUserRole(userId, newRole).subscribe({
+    next: (response) => {
+      this.snackBar.open(`${username}'s role updated successfully to ${newRole}`, 'Close', { 
+        duration: 3000,
+        panelClass: ['success-snackbar']
+      });
+      this.loadAllUsers();
+    },
+    error: (error) => {
+      this.handleError(`Failed to update user role for ${username}`, error);
+    }
+  });
+}
+
+
   deleteUser(userId: number) {
     const user = this.users.find(u => u.id === userId);
     if (confirm(`Are you sure you want to delete user: ${user?.username}?`)) {
       this.profileService.deleteUserById(userId).subscribe({
-        next: (message) => {
+        next: (response:any) => {
+          const message = response.message || 'User deleted successfully';
           this.snackBar.open(message, 'Close', { duration: 3000 });
-          this.loadAllUsers(); // Refresh the list
+          this.loadAllUsers();
         },
         error: (error) => this.handleError('Failed to delete user', error)
       });
@@ -220,11 +163,8 @@ export class DashboardComponent implements OnInit{
     return new Date(dateString).toLocaleDateString();
   }
   
-  // Method to handle tab changes (optional)
   onTabChange(index: number) {
-    // You can add logic here if needed when tab changes
     if (index === 1 && this.isAdmin) {
-      // Refresh users when switching to user management tab
       this.loadAllUsers();
     }
   }

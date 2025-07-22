@@ -65,7 +65,6 @@ export class HeaderComponent implements OnInit,OnDestroy{
         this.isAuthenticated = isAuth;
       });
 
-    // Subscribe to current user
     this.authService.currentUser$
       .pipe(takeUntil(this.destroy$))
       .subscribe(user => {
@@ -85,9 +84,8 @@ export class HeaderComponent implements OnInit,OnDestroy{
 
     this.isLoggingOut = true;
     
-    // Show confirmation dialog (optional)
     if (confirm('Are you sure you want to logout?')) {
-      this.authService.logout(true) // true to include refresh token
+      this.authService.logout(true)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: () => {
@@ -99,7 +97,6 @@ export class HeaderComponent implements OnInit,OnDestroy{
               horizontalPosition: 'center',
               verticalPosition: 'bottom'
             });
-            // AuthService will automatically navigate to login
           },
           error: (error) => {
             console.error('Logout error:', error);
@@ -111,7 +108,6 @@ export class HeaderComponent implements OnInit,OnDestroy{
               horizontalPosition: 'center',
               verticalPosition: 'bottom'
             });
-            // Even if logout fails, user will be logged out locally
           }
         });
     } else {

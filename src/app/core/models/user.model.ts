@@ -10,21 +10,6 @@ export interface CreateUserRequest {
   profileImageUrl?: string;
 }
 
-// export interface UserResponseDto {
-//   id: number;
-//   username: string;
-//   email: string;
-//   firstName: string;
-//   lastName: string;
-//   phoneNumber?: string;
-//   address?: string;
-//   bio?: string;
-//   profileImageUrl?: string;
-//   role: string;
-//   createdAt: string;
-//   lastLogin?: string;
-// }
-
 export interface UserResponseDto {
   id: number;
   username: string;
