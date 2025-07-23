@@ -143,12 +143,19 @@ private updateUserRole(userId: number, newRole: string, username: string) {
         next: (response:any) => {
           const message = response.message || 'User deleted successfully';
           this.snackBar.open(message, 'Close', { duration: 3000 });
+          this.handlePageAfterDeletion();
           this.loadAllUsers();
         },
         error: (error) => this.handleError('Failed to delete user', error)
       });
     }
   }
+
+  private handlePageAfterDeletion() {
+  if (this.pageIndex > 0 && this.users.length === 1) {
+    this.pageIndex--;
+  }
+}
 
   private handleError(message: string, error: any) {
     console.error(message, error);

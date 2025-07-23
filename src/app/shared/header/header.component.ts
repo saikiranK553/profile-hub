@@ -45,11 +45,20 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     .dropdown-item:hover {
       background-color: #f8f9fa;
     }
+      .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1030;
+    width: 100%;
+     min-height: 56px; 
+     max-height: 56px;
+  }
   `]
 })
 export class HeaderComponent implements OnInit,OnDestroy{
   private authService = inject(AuthService);
-  private router = inject(Router);
   private destroy$ = new Subject<void>();
   private snackBar = inject(MatSnackBar);
 
@@ -58,7 +67,6 @@ export class HeaderComponent implements OnInit,OnDestroy{
   isLoggingOut = false;
 
   ngOnInit() {
-    // Subscribe to authentication state
     this.authService.isAuthenticated$
       .pipe(takeUntil(this.destroy$))
       .subscribe(isAuth => {
